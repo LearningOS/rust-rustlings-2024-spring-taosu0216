@@ -8,26 +8,28 @@
 // hint.
 
 
-mod delicious_snacks {
+pub mod delicious_snacks {
     // TODO: Fix these use statements
-    use self::fruits::PEAR as fruit;
-    use self::veggies::CUCUMBER as veggie;
+    // use self::fruits::PEAR as fruit;
+    // use self::veggies::CUCUMBER as veggie;
 
-    mod fruits {
+    pub mod fruits {
         pub const PEAR: &'static str = "Pear";
         pub const APPLE: &'static str = "Apple";
     }
 
-    mod veggies {
+    pub mod veggies {
         pub const CUCUMBER: &'static str = "Cucumber";
         pub const CARROT: &'static str = "Carrot";
     }
 }
 
 fn main() {
+    use delicious_snacks::fruits::PEAR as fruit;
+    use delicious_snacks::veggies::CUCUMBER as veggie;
     println!(
         "favorite snacks: {} and {}",
-        delicious_snacks::fruit,
-        delicious_snacks::veggie
+        fruit,
+        veggie
     );
 }
