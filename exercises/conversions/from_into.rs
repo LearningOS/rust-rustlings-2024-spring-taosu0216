@@ -22,6 +22,7 @@ impl Default for Person {
             age: 30,
         }
     }
+
 }
 
 // Your task is to complete this implementation in order for the line `let p =
@@ -40,10 +41,37 @@ impl Default for Person {
 // If while parsing the age, something goes wrong, then return the default of
 // Person Otherwise, then return an instantiated Person object with the results
 
-// I AM NOT DONE
 
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
+        let mut p = Default::default();
+        if s.len() == 0 {
+            p
+        } else {
+            let parts: Vec<&str> = s.split(",").collect();
+            if parts.len() != 2{
+                return Default::default();
+            }
+            if let Some(first_part) = parts.get(0) {
+                if *first_part != ""{
+                    p.name=first_part.to_string();
+                }else {
+                    return Default::default();
+                }
+            }
+            if let Some(sec) = parts.get(1) {
+                if *sec != "" {
+                    if let Ok(n) = sec.parse::<usize>() {
+                        p.age = n;
+                    }else {
+                        return Default::default();
+                    }
+                }else {
+                    return Default::default();
+                }
+            }
+            return p;
+        }
     }
 }
 
