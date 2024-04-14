@@ -48,9 +48,51 @@ enum ParsePersonError {
 // you want to return a string error message, you can do so via just using
 // return `Err("my error message".into())`.
 
+fn defa() -> Person {
+    Person{
+        name: String::from("John"),
+        age: 32,
+    }
+}
+
 impl FromStr for Person {
     type Err = ParsePersonError;
     fn from_str(s: &str) -> Result<Person, Self::Err> {
+        if s == "" {
+            Err(ParsePersonError::Empty)
+        }else if s == "," {
+            Err(ParsePersonError::NoName)
+        }else {
+            let mut p = defa();
+            let parts: Vec<&str> = s.split(",").collect();
+            if parts.len() != 2{
+                return Err(ParsePersonError::BadLen);
+            }
+            if let Some(n) = parts.get(0) {
+                if *n == "" {
+                    return Err(ParsePersonError::NoName);
+                } else {
+                    p.name = n.to_string();
+                }
+            }
+            if let Some(sec) = parts.get(1) {
+                if *sec != "" {
+                    match sec.parse::<usize>() {
+                        Ok(n) => {
+                            p.age = n;
+                        },
+                        Err(e) => {
+                            return Err(ParsePersonError::ParseInt(e));
+                        },
+                    }
+                }else {
+                    if let Err(e) = sec.parse::<usize>(){
+                        return Err(ParsePersonError::ParseInt(e));
+                    }
+                }
+            }
+            return Ok(p);
+        }
     }
 }
 
